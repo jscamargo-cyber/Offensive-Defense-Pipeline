@@ -6,7 +6,7 @@ def simulate_exfiltration():
     target_ip = "127.0.0.1" 
     target_port = 4444
     
-    # Mensaje de ataque que Wazuh debe detectar
+    # Mensaje de ataque que Wazuh debe detectar (Match con local_rules.xml)
     log_message = f"X-FILTR attack detected on port {target_port}"
     
     print(f"[*] Simulando ataque hacia {target_ip}:{target_port}...")
@@ -28,3 +28,4 @@ def simulate_exfiltration():
 
 if __name__ == "__main__":
     simulate_exfiltration()
+
