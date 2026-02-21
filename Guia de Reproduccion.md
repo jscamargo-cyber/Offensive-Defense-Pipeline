@@ -1,53 +1,47 @@
 # 🚀 Guía de Reproducción Rápida (Foolproof)
 
-Esta guía permite desplegar el laboratorio completo de Seguridad Ofensiva y Defensiva en menos de 5 minutos, incluso sin conocimientos previos de Wazuh o Docker.
+Esta guía permite desplegar el laboratorio completo en menos de 5 minutos, garantizando que todos los servicios y telemetría funcionen correctamente.
 
 ## 📋 Requisitos Previos
 - Docker y Docker-Compose instalados.
-- Clonar este repositorio: `git clone https://github.com/jscamargo-cyber/Offensive-Defense-Pipeline`.
+- Clonar el repositorio.
 
 ---
 
 ## 🛠️ Paso 1: Levantar la Infraestructura
-Desde la raíz del proyecto, ejecuta:
 ```bash
 docker-compose up -d
 ```
-> [!NOTE]
-> Esto iniciará el SIEM Wazuh y el contenedor víctima (k-void-victima). Espera ~2 minutos a que el Dashboard de Wazuh esté listo.
+*Espera 2 minutos a que el SIEM esté totalmente inicializado.*
 
-## ⚙️ Paso 2: Automatización "One-Click"
-Para evitar configuraciones manuales complejas, ejecuta el script de automatización:
+## ⚙️ Paso 2: Configuración Automática
+Para resolver dependencias e inyectar las reglas de detección, simplemente ejecuta:
 ```bash
 chmod +x setup.sh && ./setup.sh
 ```
-**¿Qué hace este script?**
-1. Instala automáticamente Python y SSH en la víctima.
-2. Despliega las reglas de detección personalizadas en Wazuh.
-3. Configura el escenario vulnerable inicial.
+**Impacto Técnico:**
+- Inyecta la Regla 100002 (SID 1002) en el Manager.
+- Instala `python3` y `ssh` en la víctima.
+- Prepara la telemetría de Syslog para detección en tiempo real.
 
 ---
 
-## 💀 Paso 3: Simular el Ataque (Exfiltración)
-Ejecuta el script de ataque para disparar la alerta en el SIEM:
+## 💀 Paso 3: Simulación de Exfiltración (Demo)
+Ejecuta el ataque:
 ```bash
 docker exec k-void-victima python3 /tmp/x_filtr.py
 ```
-> [!TIP]
-> Verás un mensaje confirmando que la telemetría ha sido enviada a los logs del sistema.
+**Resultado en el SIEM:** Verás una alerta de **Nivel 12** mapeada a **MITRE T1041**.
 
 ---
 
-## 🛡️ Paso 4: Validación y Hardening (Defensa)
-1. **Ver Alerta**: Entra al Dashboard de Wazuh (localhost) y verás una **Alerta de Nivel 12 (Crítica)** con el título `X-FILTR: EXFILTRACION DE DATOS`.
-2. **Aplicar Hardening**: Cierra la vulnerabilidad detectada ejecutando:
+## 🛡️ Paso 4: Hardening (Remediación)
+Aplica los controles CIS para cerrar el vector inicial:
 ```bash
-# Bloquear acceso ROOT y Password en SSH
 docker exec k-void-victima sed -i 's/PermitRootLogin yes/PermitRootLogin no/' /etc/ssh/sshd_config
 docker exec k-void-victima sed -i 's/PasswordAuthentication yes/PasswordAuthentication no/' /etc/ssh/sshd_config
 docker exec k-void-victima service ssh restart
 ```
 
-
 ---
-**Desarrollado por John Camargo - Estrategia Ofensiva-Defensiva.**
+**Validado para Entrevistas Técnicas - J. Camargo**
