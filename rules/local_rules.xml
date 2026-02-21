@@ -1,0 +1,10 @@
+<group name="local,syslog,sshd,">
+  <rule id="100002" level="12">
+    <if_sid>510, 533</if_sid>
+    <match>4444</match>
+    <description>X-FILTR: ALERTA CRITICA - EXFILTRACION DETECTADA (PUERTO 4444)</description>
+    <mitre>
+      <id>T1041</id>
+    </mitre>
+  </rule>
+</group>

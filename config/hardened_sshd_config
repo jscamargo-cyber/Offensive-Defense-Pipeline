@@ -1,0 +1,14 @@
+# Archivo: configs/hardened_sshd_config
+# Configuración segura basada en CIS Benchmarks
+
+Protocol 2
+IgnoreRhosts yes
+HostbasedAuthentication no
+PermitRootLogin no
+PasswordAuthentication no
+PermitEmptyPasswords no
+X11Forwarding no
+MaxAuthTries 3
+ClientAliveInterval 300
+ClientAliveCountMax 0
+
